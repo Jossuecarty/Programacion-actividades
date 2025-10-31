@@ -1,43 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), "funciones"))
 
-def agregar_alumno(curso):
-    alumno=input("dime el nombre del alumno: ")
-    if alumno in curso["alumnos"]:
-        print("alumno ya registrado")
-    else:
-        curso["alumnos"].append(alumno)
-        print("se ha agregado correctamente")
-
-def buscar_alumno():
-    buscar=input("nombre a buscar: ")
-    encontrado=False
-    for curso in cursos:
-        if buscar in curso["alumnos"]:
-            print(f"{buscar} esta en {curso['nombre']}")
-            encontrado=True
-            break
-    if not encontrado:
-                print("alumno no registrado")
-
-
-def dar_de_baja_a_alumno(curso):
-    idAlumno=input("el nombre del alumno que quieres que se de de baja: ")
-    if idAlumno in curso["alumnos"]:
-        curso["alumnos"].remove (idAlumno)
-        print(f"se elimino el alumno {idAlumno} correctamente")
-    else:
-        print("no se encontro el alumno")
-
-
-def mostrar_lista(curso):
-    print(f"----{curso['nombre']}----")
-    if curso["alumnos"]:
-        for alumno in curso["alumnos"]:
-            print(f"-{alumno}")
-    else:
-        print("no hay alumnos registrados")
-
-
+from funciones.alumno import agregar_alumno, dar_de_baja_a_alumno, mostrar_lista, buscar_alumno, instructor
+from funciones.funciones_randy import generar_id
 cursos=[]
+
 while True:
     while True:
     
@@ -52,9 +20,12 @@ while True:
             continue
         else:
             break
+    id_curso= generar_id()
+    print(f"el id de su curso es {id_curso}")
     curso={"nombre": nombre_curso, "alumnos":[]}
     cursos.append(curso)
     
+    instructor(curso)
     while True:
         try:
             op2=int(input("""
@@ -64,6 +35,7 @@ while True:
 4.-buscar un alumno                                            
 5.-salir                      
 """))
+            
             if op2 <1 or op2>5:
                 print("error: debes de poner un numero entre 1 y 5")
                 continue
@@ -81,7 +53,7 @@ while True:
                     mostrar_lista(curso)
                 
                 case 4:
-                    buscar_alumno()
+                    buscar_alumno(cursos)
                 
                 case 5:
                     print("su curso quedo asi")
@@ -99,7 +71,14 @@ while True:
         print("\nresumen de todos los cursos creados:")
         for c in cursos:
             mostrar_lista(c)
-            print(f'{c["nombre"]} tiene {len(c["alumnos"])} alumnos')
+            print(f'{c["nombre"]} tiene {len(c["alumnos"])} alumnos, con id del curso {id_curso}')
+            if "instructor" in c:
+                inst=c["instructor"]
+                print(f"instructor: {inst['nombre']} {inst['edad']} years")
         print("----programa finalizado----")
         break
-                
+
+
+
+
+    #capaz cambiar instructor,aula. alumno ,edad, nombre, semestre, carrera'
